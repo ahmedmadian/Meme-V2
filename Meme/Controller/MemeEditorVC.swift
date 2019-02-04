@@ -69,9 +69,15 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
     
     func savePhoto(){
         let memedImage = generateMemedImage()
-        let meme = Meme(topText: TopTextField.text!, bottomText: BottomTextField.text!, originalImage: PickedImageView.image!, memedImage: memedImage)
         
-        let activityController = UIActivityViewController(activityItems: [meme.memedImage], applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
+       
+        activityController.completionWithItemsHandler = {activity, completed, items, error in
+            if completed {
+                _ = Meme(topText: self.TopTextField.text!, bottomText: self.BottomTextField.text!, originalImage: self.PickedImageView.image!, memedImage: memedImage)
+            }
+        }
+        
         self.present(activityController, animated: true, completion: nil)
         
     }
