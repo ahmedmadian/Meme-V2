@@ -19,9 +19,25 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
     @IBOutlet weak var BottomToolbar: UIToolbar!
     
     var imagePicker: UIImagePickerController!
+    
+    
+    let memeTextAttributes: [NSAttributedString.Key: Any] = [
+        NSAttributedString.Key.strokeColor: UIColor.black,
+        NSAttributedString.Key.foregroundColor: UIColor.white,
+        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        NSAttributedString.Key.strokeWidth: 3
+        ]
+    
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        TopTextField.textAlignment = .center
+        BottomTextField.textAlignment = .center
+        
+        TopTextField.defaultTextAttributes = memeTextAttributes
+        BottomTextField.defaultTextAttributes = memeTextAttributes
         
         //Setting Up ImagePicker
         imagePicker = UIImagePickerController()
@@ -41,12 +57,13 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
     // MARK: - Actions
     
     @IBAction func AlbumBtn_Tapped(sender: UIBarButtonItem){
-        pickImageFromAlbum()
+        pickIMageFrom(source: .photoLibrary)
     }
     
     @IBAction func CameraButton_Tapped(sender: UIBarButtonItem){
-        pickImageWithCamera()
+        pickIMageFrom(source: .camera)
     }
+    
     @IBAction func CancelButton_Tapped(sender: UIBarButtonItem){
         GetViewsFirstState()
     }
@@ -56,14 +73,9 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
     
     // MARK: Private Methods
     
-    func pickImageFromAlbum() {
+    func pickIMageFrom(source: UIImagePickerController.SourceType){
         imagePicker.allowsEditing = false
-        imagePicker.sourceType = .photoLibrary
-        self.present(imagePicker, animated: true, completion: nil)
-    }
-    
-    func pickImageWithCamera(){
-        imagePicker.sourceType = .camera
+        imagePicker.sourceType = source
         self.present(imagePicker, animated: true, completion: nil)
     }
     
