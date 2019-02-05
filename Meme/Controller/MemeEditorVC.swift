@@ -25,19 +25,22 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
         NSAttributedString.Key.strokeColor: UIColor.black,
         NSAttributedString.Key.foregroundColor: UIColor.white,
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedString.Key.strokeWidth: 3
+        NSAttributedString.Key.strokeWidth: -3
         ]
     
 
+    func setUpTextFields(for textField: UITextField) {
+        //Setup TextField
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.textAlignment = .center
+        textField.delegate = self
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        TopTextField.textAlignment = .center
-        BottomTextField.textAlignment = .center
-        
-        TopTextField.defaultTextAttributes = memeTextAttributes
-        BottomTextField.defaultTextAttributes = memeTextAttributes
+        // Setup Bottom and Top TextField
+        setUpTextFields(for: TopTextField)
+        setUpTextFields(for: BottomTextField)
         
         //Setting Up ImagePicker
         imagePicker = UIImagePickerController()
@@ -45,11 +48,11 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
         
         //Disable Camera Button if it is not avaliable
         CameraBarButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
-        
-        TopTextField.delegate = self
-        BottomTextField.delegate = self
+
+        //Subscribe to Keyboard Notification
         subscribToKeyboardNotificaion()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         unsubscribToKeyboardNotificaion()
     }
