@@ -89,12 +89,16 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
        
         activityController.completionWithItemsHandler = {activity, completed, items, error in
             if completed {
-                _ = Meme(topText: self.TopTextField.text!, bottomText: self.BottomTextField.text!, originalImage: self.PickedImageView.image!, memedImage: memedImage)
+                let generatedMeme = Meme(topText: self.TopTextField.text!, bottomText: self.BottomTextField.text!, originalImage: self.PickedImageView.image!, memedImage: memedImage)
+                
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.mems.append(generatedMeme)
+                
+                self.dismiss(animated: true, completion: nil)
             }
         }
         
         self.present(activityController, animated: true, completion: nil)
-        
     }
     
     func generateMemedImage() -> UIImage{
@@ -118,8 +122,8 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
     
     func GetViewsFirstState(){
         PickedImageView.image = nil
-        TopTextField.text = ""
-        BottomTextField.text = ""
+        TopTextField.text = "Top"
+        BottomTextField.text = "Bottom"
     }
     
     //MARK: UIImagePickerControllerDelegate Methods
@@ -146,6 +150,7 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
         }
         
     }
+    
     @objc func keyboardWillHide(_ notification: Notification) {
         self.view.frame.origin.y = 0
         PickedImageView.frame.origin.y = self.view.frame.origin.y
@@ -171,9 +176,21 @@ class MemeEditorVC: UIViewController, UITextFieldDelegate,  UIImagePickerControl
             return 0
         }
     }
+   
+    /*
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? UINavigationController {
+            if let sentMemesVs =  destinationVC.topViewController as? SavedMememsTableVC{
+                sentMemesVs.addMemeToList(meme: generatedMeme!)
+            }
+        }
+    }
     
-    
-    
+    @IBAction func unwindsegueFromSavedMemesVC(unwindSegue: UIStoryboardSegue) {
+        GetViewsFirstState()
+    }
+     
+     */
     
 }
 
